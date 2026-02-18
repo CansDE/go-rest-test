@@ -1,7 +1,6 @@
 package database
 
 import (
-	"fmt"
 	"test-rest-api/internal/config"
 	"time"
 
@@ -31,7 +30,7 @@ func NewPostgres(config config.DBConfig) (*gorm.DB, error) {
 	sqlDB.SetConnMaxIdleTime(maxLifetime)
 
 	if err := sqlDB.Ping(); err != nil {
-		return nil, fmt.Errorf("%w", err)
+		return nil, err
 	}
 	return db, nil
 }

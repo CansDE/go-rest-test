@@ -2,20 +2,23 @@ package server
 
 import (
 	"test-rest-api/internal/handlers"
+	"test-rest-api/internal/repository"
 
 	"github.com/gofiber/fiber/v3"
+	"gorm.io/gorm"
 )
 
-func StartServer() error {
+func StartServer(db *gorm.DB) error {
 	app := fiber.New()
 
 	//ROUTES
 	usersRoutes := app.Group("/users")
 
-	//UserHandler irgendwie hier raus machen damit ich nicht gorm.DB in StartServer packen muss
-	//für routes
+	//REPOS
+	userRepo := repository.NewUserRepository(db)
 
-	userHandler := handlers.NewUserHandler(usersRoutes)
+	//HANDLERS
+	userHandler := handlers.NewUserHandler(usersRoutes, userRepo)
 	userHandler.RegisterRoutes()
 
 	err := app.Listen(":8080")

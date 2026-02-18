@@ -1,5 +1,7 @@
 package models
 
+import "github.com/gofiber/fiber/v3"
+
 type User struct {
 	ID       int32
 	Name     string
@@ -8,11 +10,11 @@ type User struct {
 	Admin    bool
 }
 
-func NewUser(name, email, password string, admin bool) *User {
-	return &User{
-		Name:     name,
-		Email:    email,
-		Password: password,
-		Admin:    admin,
+func UserFromContext(ctx fiber.Ctx) *User {
+	u := new(User)
+	err := ctx.Bind().Body(u)
+	if err != nil {
+		return &User{}
 	}
+	return u
 }
